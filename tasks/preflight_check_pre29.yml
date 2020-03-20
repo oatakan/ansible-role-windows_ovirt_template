@@ -1,0 +1,40 @@
+---
+
+- name: get the datacenter name (<2.9)
+  ovirt_datacenter_facts:
+    auth: "{{ ovirt_auth }}"
+    pattern: "Clusters.name = {{ providers.ovirt.cluster }}"
+
+- name: get storage information (<2.9)
+  ovirt_storage_domain_facts:
+    auth: "{{ ovirt_auth }}"
+    pattern: "datacenter={{ ovirt_datacenters[0].name }}"
+  when:
+    - template_disk_storage is undefined
+
+- name: get data domain (<2.9)
+  set_fact:
+    disk_storage_domain: "{{ ovirt_storage_domains|json_query(the_query)|list|first}}"
+  when:
+    - template_disk_storage is undefined
+  vars:
+    the_query: "[?type=='data']"
+
+- name: check if template already exists (<2.9)
+  ovirt_template_facts:
+    auth: "{{ ovirt_auth }}"
+    pattern: "name={{ template.name }} and datacenter={{ ovirt_datacenters[0].name }}"
+
+
+- block:
+    - name: set template_found to yes
+      set_fact:
+        template_found: yes
+
+    - name: fail with message
+      fail:
+        msg: "Existing template found on ovirt/rhv: {{ template.name }}"
+      when: not template_force|bool
+  when:
+    - ovirt_templates is defined
+    - ovirt_templates | length > 0
