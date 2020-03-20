@@ -15,7 +15,7 @@ galaxy_info:
         - all
 
   cloud_platforms:
-    - rhv
+    - oVirt
 
   galaxy_tags:
     - windows
