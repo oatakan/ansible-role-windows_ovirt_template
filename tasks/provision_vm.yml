@@ -21,6 +21,7 @@
         network: "{{ template.networks[0].name }}"
     custom_properties: "{{ custom_properties | default(omit) }}"
     operating_system: "{{ template_vm_guest_id | default(omit) }}"
+    timezone: "{{ template_timezone | default(omit) }}"
   async: 7200
   poll: 0
   register: deploy

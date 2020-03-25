@@ -48,6 +48,7 @@ template_vm_dns_servers:
 
 template_convert_timeout: 900
 template_convert_seal: no
+template_timezone: 'Etc/GMT'
 
 ovirt_datacenter: mydatacenter
 ovirt_cluster: production
