@@ -11,6 +11,12 @@ You need to have the following packages installed on your control machine:
 
 - mkisofs
 
+You need to enable qemu_cmdline hook available on your RHV/Ovirt environment, this is required to enable multiple iso files attached. Follow the instructions documented here:
+
+https://www.ovirt.org/develop/developer-guide/vdsm/hook/qemucmdline.html
+
+Before you can use this role, you need to make sure you have Windows install media iso file uploaded to a iso domain on your RHV/Ovirt environment.
+
 Role Variables
 --------------
 
@@ -67,6 +73,10 @@ Including an example of how to use your role (for instance, with variables passe
     
       roles:
         - oatakan.windows_ovirt_template
+
+For disconnected environments, you can overwrite this variable to point to a local copy of a script to enable winrm:
+
+winrm_enable_script_url: https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1
 
 License
 -------
