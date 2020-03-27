@@ -7,11 +7,11 @@ You can run this role as a part of CI/CD pipeline for building Windows templates
 Requirements
 ------------
 
-You need to have the following packages installed on your control machine:
+You need to have the following packages installed on your ansible control machine:
 
 - mkisofs
 
-You need to enable qemu_cmdline hook available on your RHV/Ovirt environment, this is required to enable multiple iso files attached. Follow the instructions documented here:
+You need to enable qemu_cmdline hook on your RHV/Ovirt environment, this is required to enable attaching multiple iso files. Follow the instructions documented here:
 
 https://www.ovirt.org/develop/developer-guide/vdsm/hook/qemucmdline.html
 
@@ -63,7 +63,7 @@ Including an example of how to use your role (for instance, with variables passe
         ovirt_iso_domain: iso_domain
         
         template_vm_network_name: ovirtmgmt
-        template_vm_ip_address: 192.168.10.95
+        template_vm_ip_address: 192.168.10.95 # static ip is required
         template_vm_netmask: 255.255.255.0
         template_vm_gateway: 192.168.10.254
         template_vm_domain: example.com
@@ -76,7 +76,11 @@ Including an example of how to use your role (for instance, with variables passe
 
 For disconnected environments, you can overwrite this variable to point to a local copy of a script to enable winrm:
 
-winrm_enable_script_url: https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1
+**winrm_enable_script_url:** https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1
+
+you can also localize virtio-win and update the virtio_iso_url variable to point to your local url:
+
+**virtio_iso_url:** https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.173-2/virtio-win.iso
 
 License
 -------
