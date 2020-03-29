@@ -16,7 +16,7 @@
 
 - name: get data domain
   set_fact:
-    disk_storage_domain: "{{ storage_info.ovirt_storage_domains|json_query(the_query)|list|first}}"
+    disk_storage_domain: "{{ storage_info.ovirt_storage_domains|json_query(the_query)|list|first|default(None) }}"
   when:
     - template_disk_storage is undefined
   vars:
@@ -24,7 +24,7 @@
 
 - name: get iso domain (deprecated as of oVirt/RHV 4.3)
   set_fact:
-    iso_domain: "{{ storage_info.ovirt_storage_domains|json_query(the_query)|list|first}}"
+    iso_domain: "{{ storage_info.ovirt_storage_domains|json_query(the_query)|list|first|default(None) }}"
   vars:
     the_query: "[?type=='iso']"
 
