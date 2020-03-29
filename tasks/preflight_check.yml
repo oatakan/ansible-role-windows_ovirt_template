@@ -22,6 +22,12 @@
   vars:
     the_query: "[?type=='data']"
 
+- name: get iso domain (deprecated as of oVirt/RHV 4.3)
+  set_fact:
+    iso_domain: "{{ storage_info.ovirt_storage_domains|json_query(the_query)|list|first}}"
+  vars:
+    the_query: "[?type=='iso']"
+
 - name: check if template already exists
   ovirt_template_info:
     auth: "{{ ovirt_auth }}"
@@ -40,3 +46,28 @@
   when:
     - template_info.ovirt_templates is defined
     - template_info.ovirt_templates | length > 0
+
+- name: check iso file on data domain
+  ovirt_disk_info:
+    auth: "{{ ovirt_auth }}"
+    pattern: "name={{ iso_file_name }}"
+  register: ovirt_disk_main_iso
+  when: iso_file_name is defined
+
+- debug:
+    msg: "{{ ovirt_disk_main_iso }}"
+
+- name: set file id of the iso file
+  set_fact:
+    iso_file_id: "{{ ovirt_disk_main_iso.ovirt_disks[0].id }}"
+  when:
+    - ovirt_disk_main_iso.ovirt_disks | length > 0
+    - ovirt_disk_main_iso.ovirt_disks[0].id is defined
+    - ovirt_disk_main_iso.ovirt_disks[0].content_type == 'iso'
+
+- name: fail with message
+  fail:
+    msg: "iso file ({{ template.name }}) could not be found on the data domain and iso domain does not exists"
+  when:
+    - iso_file_id is undefined
+    - iso_domain is undefined or iso_domain == ''
