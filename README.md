@@ -34,12 +34,14 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - name: create a ovirt rhel template
+    - name: create a ovirt windows template
       hosts: all
       gather_facts: False
       connection: local
       become: no
       vars:
+        template_force: yes #overwrite existing template with the same name
+        export_ovf: no # export the template to export domain upon creation
         local_account_password: ''
         local_administrator_password: ''
         windows_distro_name: 2019_standard # this needs to be one of the standard values see 'os_short_names' var
@@ -56,11 +58,11 @@ Including an example of how to use your role (for instance, with variables passe
         vm_upgrade_powershell: false # only needed for 2008 R2
         install_updates: false # it will take longer to build with the updates, set to true if you want the updates
         
-        ovirt_datacenter: mydatacenter
-        ovirt_cluster: production
-        ovirt_datastore: data_domain
-        ovirt_export_domain: export_domain
-        ovirt_iso_domain: iso_domain
+        ovirt_datacenter: '' # name of the datacenter
+        ovirt_cluster: '' # name of the cluster
+        ovirt_datastore: '' # name of the data domain
+        ovirt_export_domain: '' # name of the iso domain
+        ovirt_iso_domain: '' # this is deprecated as of 4.3 you can omit if not used
         
         template_vm_network_name: ovirtmgmt
         template_vm_ip_address: 192.168.10.95 # static ip is required
