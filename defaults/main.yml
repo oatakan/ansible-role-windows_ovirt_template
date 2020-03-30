@@ -53,7 +53,7 @@ template_timezone: 'GMT Standard Time'
 
 ovirt_datacenter: mydatacenter
 ovirt_cluster: production
-ovirt_datastore: data_domain
+ovirt_data_domain: data_domain
 ovirt_export_domain: export_domain
 ovirt_iso_domain: iso_domain
 

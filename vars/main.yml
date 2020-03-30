@@ -24,7 +24,7 @@ providers:
   ovirt:
     datacenter: "{{ ovirt_datacenter }}"
     cluster: "{{ ovirt_cluster }}"
-    datastore: "{{ ovirt_datastore }}"
+    data_domain: "{{ ovirt_data_domain }}"
     export_domain: "{{ ovirt_export_domain }}"
     iso_domain: "{{ ovirt_iso_domain }}"
 
@@ -39,7 +39,7 @@ template:
       format: "{{ template_vm_root_disk_format }}"
       interface: virtio
       bootable: yes
-      storage_domain: "{{ providers.ovirt.datastore | default('data_domain') }}"
+      storage_domain: "{{ providers.ovirt.data_domain | default('data_domain') }}"
   memory: "{{ template_vm_memory }}"
   cpu: "{{ template_vm_cpu }}"
   networks:

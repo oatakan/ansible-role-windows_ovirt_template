@@ -60,7 +60,7 @@ Including an example of how to use your role (for instance, with variables passe
         
         ovirt_datacenter: '' # name of the datacenter
         ovirt_cluster: '' # name of the cluster
-        ovirt_datastore: '' # name of the data domain
+        ovirt_data_domain: '' # name of the data domain
         ovirt_export_domain: '' # name of the iso domain
         ovirt_iso_domain: '' # this is deprecated as of 4.3 you can omit if not used
         
