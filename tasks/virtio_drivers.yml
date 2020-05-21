@@ -17,12 +17,15 @@
 
 - name: get a list of files from template iso
   shell: >
+    set -o pipefail &&
     isoinfo -f -R -i {{ playbook_dir }}/{{ temp_directory }}/virtio_win.iso |
     grep -E "^{{ virtio_iso_list_of_directories_to_extract | join('|^') }}"
+  changed_when: False
   register: virtio_iso_list_of_files
 
 - name: copy files from virtio iso to target
   shell: |
+    set -o pipefail &&
     isoinfo -f -R -i {{ playbook_dir }}/{{ temp_directory }}/virtio_win.iso |\
     grep -E "^{{ virtio_iso_list_of_directories_to_extract | join('|^') }}" | while read line; do
       d=$(dirname $line)
@@ -32,5 +35,6 @@
       [ -d ".${line}" ] || isoinfo -R -i \
       {{ playbook_dir }}/{{ temp_directory }}/virtio_win.iso -x $line > ".${line}"
     done
+  changed_when: True
   args:
     chdir: "{{ playbook_dir }}/{{ temp_directory }}/ks_iso"
