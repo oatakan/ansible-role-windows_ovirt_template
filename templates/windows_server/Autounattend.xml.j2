@@ -131,9 +131,9 @@
                 <Organization>Your Org.</Organization>
                 <ProductKey>
 {% if unattend.product_key is defined and unattend.product_key|length %}
-                    <Key>{{ unattend.product_key }}</Key>
+                    <Key>{{ unattend.product_key | trim }}</Key>
 {% endif %}
-                    <WillShowUI>OnError</WillShowUI>
+                    <WillShowUI>Never</WillShowUI>
                 </ProductKey>
             </UserData>
         </component>
@@ -165,6 +165,8 @@
         <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
         <NetworkLocation>Home</NetworkLocation>
         <ProtectYourPC>1</ProtectYourPC>
+        <SkipMachineOOBE>true</SkipMachineOOBE>
+        <SkipUserOOBE>true</SkipUserOOBE>
       </OOBE>
       <TimeZone>{{ settings.time_zone | default('UTC') }}</TimeZone>
       <UserAccounts>
