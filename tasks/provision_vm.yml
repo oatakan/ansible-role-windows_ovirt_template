@@ -9,6 +9,7 @@
     wait: yes
     memory: "{{ template.memory }}MiB"
     cpu_sockets: "{{ template.cpu }}"
+    bios_type: "{{ template.bios_type | default(omit) }}"
     boot_devices:
       - hd
       - cdrom
