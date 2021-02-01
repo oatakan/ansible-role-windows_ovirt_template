@@ -20,6 +20,8 @@ unattend:
     skip_auto_activation: true
   product_key: "{{ iso_product_key | default('') }}"
 
+custom_efi_enabled: "{{ false if (ansible_version.full is version('2.9', '>=')) else true }}"
+
 providers:
   ovirt:
     datacenter: "{{ ovirt_datacenter }}"
