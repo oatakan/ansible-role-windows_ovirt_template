@@ -42,7 +42,7 @@ template:
       storage_domain: "{{ providers.ovirt.data_domain | default('data_domain') }}"
   memory: "{{ template_vm_memory }}"
   cpu: "{{ template_vm_cpu }}"
-  bios_type: "{{ ('q35_ovmf') if (template_vm_efi|bool and not custom_efi_enabled|bool) else (None) }}"
+  bios_type: "{{ ('q35_ovmf') if (template_vm_efi|bool and not custom_efi_enabled|bool) else (omit) }}"
   networks:
     - name: "{{ template_vm_network_name }}"
       ip: "{{ template_vm_ip_address }}"
