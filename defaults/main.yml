@@ -73,5 +73,5 @@ os_short_names:
   win2012: 2k12R2
   win2016: 2k16
   win2019: 2k19
-  win2022: 2k22
+  win2022: 2k19 # 2k22 is not *yet* available on virtio iso
   win10: w10
