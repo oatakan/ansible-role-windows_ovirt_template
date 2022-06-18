@@ -38,6 +38,10 @@ distro_name: win2019
 iso_file_name: 17763.253.190108-0006.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso
 windows_sysprep_template_folder: windows_server
 
+# you can also set up vTPM device which emulates TPM 2.0 device.
+# see: https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-4DBF65A4-4BA0-4667-9725-AE9F047DE00A.html
+enable_lab_config: false # this enables bypassing TPM and other checks for older systems for Windows 11 installation
+
 vm_ansible_port: 5986
 vm_ansible_winrm_transport: credssp
 vm_upgrade_powershell: no
