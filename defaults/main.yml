@@ -6,8 +6,8 @@ instance_wait_connection_timeout: 400
 instance_stop_retry_limit: 60
 
 # this will remove existing template with the same name
-template_force: no
-template_found: no
+template_force: false
+template_found: false
 
 export_ovf: no
 

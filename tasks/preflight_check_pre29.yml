@@ -1,5 +1,9 @@
 ---
 
+- name: set template_found to false
+  set_fact:
+    template_found: false
+
 - name: get the datacenter name (<2.9)
   ovirt.ovirt.ovirt_datacenter_facts:
     auth: "{{ ovirt_auth }}"
@@ -32,9 +36,9 @@
     pattern: "name={{ template.name }} and datacenter={{ ovirt_datacenters[0].name }}"
 
 - block:
-    - name: set template_found to yes
+    - name: set template_found to true
       set_fact:
-        template_found: yes
+        template_found: true
 
     - name: fail with message
       fail:
