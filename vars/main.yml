@@ -6,6 +6,8 @@ iso_file: "windows_{{ distro_name }}_autounattend{{ awx_job_id | default('') }}.
 
 export_dir: "{{ playbook_dir }}/{{ temp_directory }}"
 
+remove_template: "{{ true if (role_action == 'deprovision' or template_force|bool) else false }}"
+
 unattend:
   administrator_password: "{{ local_administrator_password }}"
   local_accounts:

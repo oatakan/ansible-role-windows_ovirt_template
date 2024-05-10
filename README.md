@@ -36,12 +36,13 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
+    ---
     # import ovirt.ovirt collections
     - name: create a ovirt windows template
       hosts: all
-      gather_facts: False
+      gather_facts: false
       connection: local
-      become: no
+      become: false
       vars:
         template_force: yes #overwrite existing template with the same name
         export_ovf: no # export the template to export domain upon creation
@@ -78,6 +79,18 @@ Including an example of how to use your role (for instance, with variables passe
     
       roles:
         - oatakan.windows_ovirt_template
+
+    ---
+    # import ovirt.ovirt collections
+    - name: delete a ovirt windows template
+      hosts: all
+      gather_facts: false
+      connection: local
+      become: false
+    
+      roles:
+        - role: oatakan.windows_ovirt_template
+          role_action: deprovision
 
 For disconnected environments, you can overwrite this variable to point to a local copy of a script to enable winrm:
 
