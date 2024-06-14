@@ -1,12 +1,11 @@
 ---
-
 - name: provision a new vm
   ovirt.ovirt.ovirt_vm:
     auth: "{{ ovirt_auth }}"
     name: "{{ template.name }}"
-    cluster: "{{ providers.ovirt.cluster|default('Default') }}"
+    cluster: "{{ providers.ovirt.cluster | default('Default') }}"
     state: present
-    wait: yes
+    wait: true
     memory: "{{ template.memory }}MiB"
     cpu_sockets: "{{ template.cpu }}"
     bios_type: "{{ template.bios_type | default(omit) }}"
@@ -28,7 +27,8 @@
   register: deploy
 
 - name: wait for instance creation to complete
-  async_status: jid="{{ deploy.ansible_job_id }}"
+  ansible.builtin.async_status:
+    jid: "{{ deploy.ansible_job_id }}"
   register: instance
   until: instance.finished
   retries: "{{ instance_wait_retry_limit }}"
@@ -44,9 +44,9 @@
     interface: "{{ item.interface | default(omit) }}"
     bootable: "{{ item.bootable | default(omit) }}"
     storage_domain: "{{ item.storage_domain | default(omit) }}"
-    activate: yes
+    activate: true
     state: present
-    wait: yes
+    wait: true
   async: 7200
   poll: 0
   register: create_disks
@@ -56,7 +56,7 @@
     - template.disks is defined
 
 - name: wait for disk creation to complete
-  async_status:
+  ansible.builtin.async_status:
     jid: "{{ item.ansible_job_id }}"
   register: disks_creation
   until: disks_creation.finished
@@ -68,14 +68,16 @@
     - create_disks.results is defined
     - item.ansible_job_id is defined
 
-- include_tasks: wait_disk_unlock_pre29.yml
+- name: wait for root disk to unlock (pre 2.9)
+  ansible.builtin.include_tasks: wait_disk_unlock_pre29.yml
   when:
     - ansible_version.full is version('2.9', '<')
     - template is defined
     - template.disks is defined
     - disks_creation.results is defined
 
-- include_tasks: wait_disk_unlock.yml
+- name: wait for root disk to unlock (post 2.9)
+  ansible.builtin.include_tasks: wait_disk_unlock.yml
   when:
     - ansible_version.full is version('2.9', '>=')
     - template is defined
@@ -84,6 +86,7 @@
 
 - name: assign tags to provisioned vms
   ovirt.ovirt.ovirt_tag:
+    auth: "{{ ovirt_auth }}"
     name: "{{ item }}_{{ instance.item.item[item] }}"
     vms: ["{{ instance.item.item.name }}"]
     state: attached
@@ -100,25 +103,26 @@
   ovirt.ovirt.ovirt_vm:
     auth: "{{ ovirt_auth }}"
     name: "{{ template.name }}"
-    cluster: "{{ providers.ovirt.cluster|default('Default') }}"
+    cluster: "{{ providers.ovirt.cluster | default('Default') }}"
     state: running
   async: 7200
   poll: 0
   register: start
 
 - name: wait for instance creation to complete
-  async_status: jid="{{ start.ansible_job_id }}"
+  ansible.builtin.async_status:
+    jid: "{{ start.ansible_job_id }}"
   register: instance
   until: instance.finished
   retries: "{{ instance_wait_retry_limit }}"
   delay: 10
 
 - name: waiting for server to come online
-  wait_for:
+  ansible.builtin.wait_for:
     host: "{{ template.networks[0].ip }}"
     port: "{{ template.ansible_port | default(vm_ansible_port) | default(ansible_port) | default('5986') }}"
     timeout: "{{ instance_wait_connection_timeout }}"
   when:
     - instance is changed
     - template is defined
-  ignore_errors: yes
+  failed_when: false

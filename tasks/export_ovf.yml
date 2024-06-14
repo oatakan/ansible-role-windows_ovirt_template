@@ -1,5 +1,4 @@
 ---
-
 - name: export template to export domain
   ovirt.ovirt.ovirt_template:
     auth: "{{ ovirt_auth }}"
@@ -12,7 +11,7 @@
   register: export_ovf_file
 
 - name: wait for export to complete
-  async_status:
+  ansible.builtin.async_status:
     jid: "{{ export_ovf_file.ansible_job_id }}"
   register: ovf
   until: ovf.finished

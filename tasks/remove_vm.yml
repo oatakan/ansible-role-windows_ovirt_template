@@ -1,5 +1,4 @@
 ---
-
 - name: remove vm
   ovirt.ovirt.ovirt_vm:
     auth: "{{ ovirt_auth }}"
@@ -12,7 +11,7 @@
   when: template is defined
 
 - name: wait for template deletion to complete
-  async_status:
+  ansible.builtin.async_status:
     jid: "{{ undeploy.ansible_job_id }}"
   register: instance
   until: instance.finished

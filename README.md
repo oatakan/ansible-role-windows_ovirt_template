@@ -44,8 +44,8 @@ Including an example of how to use your role (for instance, with variables passe
       connection: local
       become: false
       vars:
-        template_force: yes #overwrite existing template with the same name
-        export_ovf: no # export the template to export domain upon creation
+        template_force: true #overwrite existing template with the same name
+        export_ovf: false # export the template to export domain upon creation
         local_account_password: ''
         local_administrator_password: ''
         distro_name: win2019 # this needs to be one of the standard values see 'os_short_names' var

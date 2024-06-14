@@ -1,36 +1,41 @@
 ---
-- block:
+- name: make iso file
+  block:
     - name: create temporary directory
-      file:
+      ansible.builtin.file:
         path: "{{ temp_directory }}/ks_iso"
         state: directory
+        mode: "0755"
 
     - name: create Autounattend.xml file
-      template:
+      ansible.builtin.template:
         src: "{{ windows_sysprep_template_folder }}/Autounattend.xml.j2"
         dest: "{{ temp_directory }}/ks_iso/Autounattend.xml"
+        mode: "0755"
 
     - name: download ConfigureRemotingForAnsible.ps1 script
-      get_url:
-         url: "{{ winrm_enable_script_url }}"
-         dest: "{{ temp_directory }}/ks_iso/ConfigureRemotingForAnsible.ps1"
+      ansible.builtin.get_url:
+        url: "{{ winrm_enable_script_url }}"
+        dest: "{{ temp_directory }}/ks_iso/ConfigureRemotingForAnsible.ps1"
+        mode: "0777"
       register: download_script
       until: download_script is success
       delay: 3
       retries: 5
 
     - name: include virtio drivers
-      include_tasks: virtio_drivers.yml
-
+      ansible.builtin.include_tasks: virtio_drivers.yml
     - name: create iso
-      command: mkisofs -V ADDISO -r -iso-level 4 -o {{ playbook_dir }}/{{ temp_directory }}/windows_{{ distro_name }}_autounattend_autogen.iso .
+      ansible.builtin.command: mkisofs -V ADDISO -r -iso-level 4 -o {{ playbook_dir }}/{{ temp_directory }}/windows_{{ distro_name }}_autounattend_autogen.iso .
+      changed_when: true
       args:
         chdir: "{{ playbook_dir }}/{{ temp_directory }}/ks_iso"
 
-    - include_tasks: datastore_upload.yml
+    - name: upload iso to datastore
+      ansible.builtin.include_tasks: datastore_upload.yml
   always:
     - name: remove temporary files
-      file:
+      ansible.builtin.file:
         path: "{{ temp_directory }}/{{ item }}"
         state: absent
       loop:

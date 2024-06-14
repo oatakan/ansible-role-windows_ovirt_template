@@ -1,19 +1,20 @@
 ---
-
-- block:
-
+- name: stop vm
+  block:
     - name: wait for server to stop responding
-      wait_for:
+      ansible.builtin.wait_for:
         host: "{{ template_vm_ip_address }}"
         port: "{{ vm_ansible_port | default('5986') }}"
         timeout: 120
         state: stopped
-      ignore_errors: yes
+      failed_when: false
 
-    - include_tasks: wait_vm_poweredoff_pre29.yml
+    - name: wait for vm to power off (pre 2.9)
+      ansible.builtin.include_tasks: wait_vm_poweredoff_pre29.yml
       when: ansible_version.full is version('2.9', '<')
 
-    - include_tasks: wait_vm_poweredoff.yml
+    - name: wait for vm to power off (post 2.9)
+      ansible.builtin.include_tasks: wait_vm_poweredoff.yml
       when: ansible_version.full is version('2.9', '>=')
 
   rescue:
@@ -25,10 +26,12 @@
         state: stopped
       when: template is defined
 
-    - include_tasks: wait_vm_poweredoff_pre29.yml
+    - name: wait for vm to power off (pre 2.9)
+      ansible.builtin.include_tasks: wait_vm_poweredoff_pre29.yml
       when: ansible_version.full is version('2.9', '<')
 
-    - include_tasks: wait_vm_poweredoff.yml
+    - name: wait for vm to power off (post 2.9)
+      ansible.builtin.include_tasks: wait_vm_poweredoff.yml
       when: ansible_version.full is version('2.9', '>=')
 
 - name: reconfigure vm
@@ -39,7 +42,7 @@
     boot_devices:
       - hd
     cd_iso: ""
-    custom_properties: "{{ custom_properties_efi if (template_vm_efi|bool and custom_efi_enabled|bool) else ([{}]) }}"
-    force: yes
+    custom_properties: "{{ custom_properties_efi if (template_vm_efi | bool and custom_efi_enabled | bool) else ([{}]) }}"
+    force: true
     state: present
   when: template is defined
