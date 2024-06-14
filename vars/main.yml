@@ -70,14 +70,22 @@ qemu_cmdline_efi:
 
 custom_properties:
   - name: qemu_cmdline
-    value: >
-      {{ ((qemu_cmdline_second_iso + qemu_cmdline_efi) | to_json)
-      if (template_vm_efi | bool and custom_efi_enabled | bool)
-      else (qemu_cmdline_second_iso | to_json) }}
+    value: >-
+      {{
+        (
+          (qemu_cmdline_second_iso + qemu_cmdline_efi) | to_json
+        ) if (
+          template_vm_efi | bool and custom_efi_enabled | bool
+        ) else (
+          qemu_cmdline_second_iso | to_json
+        )
+      }}
 
 custom_properties_efi:
   - name: qemu_cmdline
-    value: >
-      {{ (qemu_cmdline_efi | to_json)
-      if (template_vm_efi | bool and custom_efi_enabled | bool)
-      else ('[]') }}"
+    value: >-
+      {{
+        (qemu_cmdline_efi | to_json)
+        if (template_vm_efi | bool and custom_efi_enabled | bool)
+        else ('[]')
+      }}
