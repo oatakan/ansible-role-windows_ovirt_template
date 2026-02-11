@@ -1,0 +1,48 @@
+# Ansible (runtime artifacts)
+*.retry
+*.retry.*
+.ansible/
+
+# Ansible Vault / secret files (common local naming patterns)
+*.vault
+vault.yml
+vault.yaml
+secrets.yml
+secrets.yaml
+
+# Logs / temp
+*.log
+*.tmp
+*.swp
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# IDEs / editors
+.idea/
+.vscode/
+*.iml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# OS / tooling caches
+.cache/
+
+# Test / automation tooling (safe defaults)
+.tox/
+.molecule/
