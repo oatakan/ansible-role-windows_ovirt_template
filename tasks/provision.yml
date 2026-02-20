@@ -95,5 +95,5 @@
 
 - name: fail if needed
   ansible.builtin.fail:
-    msg: fail to create a template.
+    msg: "fail to create a template: {{ template.name }}."
   when: vm_failed|bool
